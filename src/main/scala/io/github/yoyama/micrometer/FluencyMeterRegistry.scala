@@ -1,4 +1,4 @@
-package org.yoyama.micrometer
+package io.github.yoyama.micrometer
 
 import scala.collection.JavaConverters._
 import java.util.concurrent.TimeUnit
@@ -9,13 +9,19 @@ import io.micrometer.core.instrument.util.{HierarchicalNameMapper, MeterPartitio
 import org.komamitsu.fluency.fluentd.FluencyBuilderForFluentd
 import org.komamitsu.fluency.{EventTime, Fluency}
 import java.util.concurrent.ThreadFactory
-import java.util.function.ToDoubleFunction
 
 object FluencyMeterRegistry {
-  private def defaultThreadFactory = new NamedThreadFactory("fluency-metrics-publisher")
+  val emptyTag = Seq.empty[Tag].asJava
+
+  def defaultThreadFactory = new NamedThreadFactory("fluency-metrics-publisher")
+
+  def createFluency(fconfig:FluencyRegistryConfigTrait):Fluency = {
+    val builder = new FluencyBuilderForFluentd()
+    builder.build()
+  }
 
   def apply(fconfig:FluencyRegistryConfigTrait, nameMapper:HierarchicalNameMapper, fclock:Clock):FluencyMeterRegistry = {
-    new FluencyMeterRegistry(fconfig, nameMapper, fclock, new FluencyBuilderForFluentd().build(), defaultThreadFactory)
+    new FluencyMeterRegistry(fconfig, nameMapper, fclock, createFluency(fconfig), defaultThreadFactory)
   }
 
   def apply(fconfig:FluencyRegistryConfigTrait, nameMapper:HierarchicalNameMapper, fclock:Clock, fluency:Fluency):FluencyMeterRegistry = {
@@ -29,7 +35,6 @@ class FluencyMeterRegistry(val fconfig:FluencyRegistryConfigTrait, val nameMappe
 
   start(threadFactory)
 
-  val emptyTag = Seq.empty[Tag].asJava
 
   override def start(threadFactory: ThreadFactory): Unit = super.start(threadFactory)
 

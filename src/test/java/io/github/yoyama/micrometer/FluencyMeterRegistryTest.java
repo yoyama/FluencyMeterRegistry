@@ -1,4 +1,4 @@
-package org.yoyama.micrometer;
+package io.github.yoyama.micrometer;
 
 import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -30,6 +30,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class FluencyMeterRegistryTest
 {
     List<Integer> gaugeTarget = new ArrayList<>();
+
     @Mock
     Fluency mockedFluency;
 
@@ -55,21 +56,23 @@ public class FluencyMeterRegistryTest
     @Test
     public void verifyCounter() throws InterruptedException
     {
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 10; i++) {
             m.counter("counterA").increment();
             Thread.sleep(1000);
         }
         assertThat("emit size > 0", emitList.size(), greaterThan(0));
+        m.close();
     }
 
     @Test
     public void verifySummary() throws InterruptedException
     {
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 10; i++) {
             m.summary("summaryA").record(i*15.5);
             Thread.sleep(1000);
         }
         assertThat("emit size > 0", emitList.size(), greaterThan(0));
+        m.close();
     }
 
     @Test
@@ -77,7 +80,7 @@ public class FluencyMeterRegistryTest
     {
 
         MeterRegistry mcomp = createCompositeMeterRegistry();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 10; i++) {
             mcomp.counter("counterB").increment();
             mcomp.summary("summaryB").record(i*11.1);
             gaugeTarget.add(i);
@@ -85,6 +88,7 @@ public class FluencyMeterRegistryTest
             Thread.sleep(1000);
         }
         assertThat("emit size > 0", emitList.size(), greaterThan(0));
+        mcomp.close();
     }
 
     FluencyMeterRegistry createMeterRegistry()
@@ -104,7 +108,7 @@ public class FluencyMeterRegistryTest
                 return null;
             }
             @Override
-            public Duration step() { return Duration.ofSeconds(10); }
+            public Duration step() { return Duration.ofSeconds(5); }
 
 
         }, Clock.SYSTEM);
