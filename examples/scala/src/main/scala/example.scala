@@ -11,7 +11,7 @@ object Example {
         val fluency:Fluency = new FluencyBuilderForFluentd().build()
         val fconfig = new FluencyRegistryConfigTrait {
             override def prefix(): String = "default"
-            override def tag(): String = "example"
+            override def tag(): String = "example.scala"
             override def step(): Duration = Duration.ofSeconds(10)
         }
         val m = FluencyMeterRegistry(fconfig, HierarchicalNameMapper.DEFAULT, Clock.SYSTEM, fluency)
