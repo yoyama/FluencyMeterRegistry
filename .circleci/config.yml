@@ -23,7 +23,7 @@ jobs:
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           key: sbt-cache
       - run:
-          name: Compile fluency-meter-registry dist package
+          name: Test fluency-meter-registry
           command: cat /dev/null | sbt clean test
       - save_cache:
           key: sbt-cache
