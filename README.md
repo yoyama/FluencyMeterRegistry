@@ -5,34 +5,18 @@ A [Micrometer](https://micrometer.io/) plugin for [Fluency](https://github.com/k
 Send metrics of Micrometer to [fluentd](https://www.fluentd.org/).
 
 ## How to use (Scala)
-build.sbt
+[build.sbt](https://github.com/yoyama/FluencyMeterRegistry/blob/master/examples/scala/build.sbt)
 ```scala
 ThisBuild / scalaVersion     := "2.12.8"
-
-resolvers +=
-  "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/\
-repositories/snapshots"
 
 lazy val root = (project in file("."))
   .settings(
     libraryDependencies ++= Seq(
-      "io.github.yoyama" % "fluency-meter-registory_2.12" % "0.1\
-.0-SNAPSHOT",
-      "io.micrometer" % "micrometer-core" % "1.2.0",
-      "org.komamitsu" % "fluency-core" % "2.3.3",
-      "org.komamitsu" % "fluency-fluentd" % "2.3.3")
+      "io.github.yoyama" % "fluency-meter-registory_2.12" % VERSION)
 ```
 
-example.scala
+[example.scala](https://github.com/yoyama/FluencyMeterRegistry/blob/master/examples/scala/src/main/scala/example.scala)
 ```scala
-import java.time.Duration
-
-import io.github.yoyama.micrometer.{FluencyMeterRegistry, FluencyRegistryConfigTrait}
-import io.micrometer.core.instrument.Clock
-import io.micrometer.core.instrument.util.HierarchicalNameMapper
-import org.komamitsu.fluency.Fluency
-import org.komamitsu.fluency.fluentd.FluencyBuilderForFluentd
-
 object Example {
     def main(args: Array[String]): Unit ={
         val fluency:Fluency = new FluencyBuilderForFluentd().build()
@@ -48,7 +32,24 @@ object Example {
 }
 ```
 ## How to use (Java)
-```java
+[pom.xml](https://github.com/yoyama/FluencyMeterRegistry/blob/master/examples/java/pom.xml)
+```
+  <dependencies>
+    <dependency>
+      <groupId>io.github.yoyama</groupId>
+      <artifactId>fluency-meter-registory_2.12</artifactId>
+      <version>VERSION</version>
+    </dependency>
+  </dependencies>
+```
 
+[JavaExample1](https://github.com/yoyama/FluencyMeterRegistry/blob/master/examples/java/src/main/java/io/github/yoyama/micrometer/example/JavaExample1.java)
+```java
+        Fluency fluency = new FluencyBuilderForFluentd().build();
+        FluencyRegistryConfig fconfig = new FluencyRegistryConfig("example.java", "test", Duration.ofSeconds(10));
+        FluencyMeterRegistry meter = FluencyMeterRegistry.apply(fconfig, HierarchicalNameMapper.DEFAULT, Clock.SYSTEM, fluency);
+        meter.counter("count1").increment();
+        meter.summary("summary1").record(999.9);
+        Thread.sleep(30000);
 ```
 
