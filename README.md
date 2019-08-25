@@ -1,4 +1,5 @@
 # fluency-meter-registry
+[![CircleCI](https://circleci.com/gh/yoyama/FluencyMeterRegistry/tree/master.svg?style=svg)](https://circleci.com/gh/yoyama/FluencyMeterRegistry/tree/master)
 
 A [Micrometer](https://micrometer.io/) plugin for [Fluency](https://github.com/komamitsu/fluency).
 Send metrics of Micrometer to [fluentd](https://www.fluentd.org/).
