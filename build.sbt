@@ -20,10 +20,12 @@ lazy val root = (project in file("."))
       "junit" % "junit" % "4.12" % Test,
       "com.novocode" % "junit-interface" % "0.11" % "test",
       scalaTest % Test,
+      "org.wvlet.airframe" %% "airspec" % "19.8.10" % "test",
       "org.mockito" % "mockito-all" % "1.10.19" % Test,
       "org.hamcrest" % "hamcrest-library" % "1.3" % Test
     ),
-    Test / run / fork := true
+    Test / run / fork := true,
+    testFrameworks += new TestFramework("wvlet.airspec.Framework")
   )
 
 // Uncomment the following for publishing to Sonatype.
