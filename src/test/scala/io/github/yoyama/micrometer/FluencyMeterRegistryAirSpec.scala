@@ -12,13 +12,12 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
-import org.scalatest.mockito.MockitoSugar
 import wvlet.airspec._
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-class FluencyMeterRegistryAirSpec extends AirSpec with MockitoSugar{
+class FluencyMeterRegistryAirSpec extends AirSpec {
 
   def counterTest(): Unit = new Fixture {
     val m = createMeterRegistry(mockedFluency)
@@ -111,7 +110,7 @@ class FluencyMeterRegistryAirSpec extends AirSpec with MockitoSugar{
   trait Fixture {
     val emitList = mutable.ListBuffer[Array[AnyRef]]()
     val gaugeTarget = mutable.ListBuffer[Integer]()
-    val mockedFluency = mock[Fluency]
+    val mockedFluency = mock[Fluency](classOf[Fluency])
 
     when(mockedFluency.emit(anyString, any[EventTime], any[java.util.Map[String, Object]]))
       .thenAnswer(new Answer[Unit]() {
