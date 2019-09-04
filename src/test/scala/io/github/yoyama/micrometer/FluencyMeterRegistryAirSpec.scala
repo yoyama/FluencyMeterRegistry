@@ -96,6 +96,26 @@ class FluencyMeterRegistryAirSpec extends AirSpec {
     m.close()
   }
 
+  def disableMetricsTagTst(): Unit = new Fixture {
+    val m = createMeterRegistryWithDisableTag(mockedFluency)
+    val cnt = Counter.builder("count1").tags("col1", "val1", "col2", "val2").register(m)
+    for(i <- 1 to 10) {
+      cnt.increment()
+      Thread.sleep(1000)
+    }
+    assert(emitList.size > 0)
+    val taggedCount = emitList.map(_.toList.last).foldLeft(0){ (acc, v) =>
+      val str = v.toString
+      println(str) // "{tag_col2=val2, tag_col1=val1, name=count1, count=5.0, type=counter}"
+      if(str.matches(".*tag_col1=val1.*") || str.matches(".*tag_col2=val2.*"))
+        acc+1
+      else
+        acc
+    }
+    assert(taggedCount == 0) // metrics tag is disabled. should not be found tagged record
+    m.close()
+  }
+
   trait FixtureComposition extends Fixture {
     def createCompositedMeterRegistry(): CompositeMeterRegistry = {
       val lm = new LoggingMeterRegistry(new LoggingRegistryConfig() {
@@ -123,6 +143,15 @@ class FluencyMeterRegistryAirSpec extends AirSpec {
       val fconfig = new FluencyRegistryConfig {
         override def tag(): String = "file.scala1"
         override def step(): Duration = Duration.ofSeconds(5)
+      }
+      FluencyMeterRegistry(fconfig, HierarchicalNameMapper.DEFAULT, Clock.SYSTEM, fluency)
+    }
+
+    def createMeterRegistryWithDisableTag(fluency:Fluency):FluencyMeterRegistry = {
+      val fconfig = new FluencyRegistryConfig {
+        override def tag(): String = "file.scala1"
+        override def step(): Duration = Duration.ofSeconds(5)
+        override def disableMetricsTag(): Boolean = true
       }
       FluencyMeterRegistry(fconfig, HierarchicalNameMapper.DEFAULT, Clock.SYSTEM, fluency)
     }
