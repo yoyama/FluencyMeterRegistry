@@ -20,7 +20,7 @@ lazy val root = (project in file("."))
 object Example {
     def main(args: Array[String]): Unit ={
         val fluency:Fluency = new FluencyBuilderForFluentd().build()
-        val fconfig = new FluencyRegistryConfigTrait {
+        val fconfig = new FluencyRegistryConfig {
             override def prefix(): String = "default"
             override def tag(): String = "example"
             override def step(): Duration = Duration.ofSeconds(10)
@@ -46,10 +46,9 @@ object Example {
 [JavaExample1](https://github.com/yoyama/FluencyMeterRegistry/blob/master/examples/java/src/main/java/io/github/yoyama/micrometer/example/JavaExample1.java)
 ```java
         Fluency fluency = new FluencyBuilderForFluentd().build();
-        FluencyRegistryConfig fconfig = new FluencyRegistryConfig("example.java", "test", Duration.ofSeconds(10));
+        FluencyRegistryConfig fconfig = FluencyRegistryConfig.apply("example.java", "test", Duration.ofSeconds(10));
         FluencyMeterRegistry meter = FluencyMeterRegistry.apply(fconfig, HierarchicalNameMapper.DEFAULT, Clock.SYSTEM, fluency);
         meter.counter("count1").increment();
         meter.summary("summary1").record(999.9);
         Thread.sleep(30000);
 ```
-

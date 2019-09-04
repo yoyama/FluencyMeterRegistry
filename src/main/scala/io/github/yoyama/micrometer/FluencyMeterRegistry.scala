@@ -3,12 +3,16 @@ package io.github.yoyama.micrometer
 import scala.collection.JavaConverters._
 import java.util.concurrent.TimeUnit
 
-import io.micrometer.core.instrument.{Clock, Counter, DistributionSummary, FunctionCounter, FunctionTimer, Gauge, LongTaskTimer, Meter, Tag, TimeGauge, Timer}
-import io.micrometer.core.instrument.step.{StepMeterRegistry}
+import io.micrometer.core.instrument.{Clock, Counter, DistributionSummary, FunctionCounter, FunctionTimer, Gauge, LongTaskTimer, Meter, Tag, Tags, TimeGauge, Timer}
+import io.micrometer.core.instrument.step.StepMeterRegistry
 import io.micrometer.core.instrument.util.{HierarchicalNameMapper, MeterPartition, NamedThreadFactory}
 import org.komamitsu.fluency.fluentd.FluencyBuilderForFluentd
 import org.komamitsu.fluency.{EventTime, Fluency}
 import java.util.concurrent.ThreadFactory
+import java.util.function.ToDoubleFunction
+
+import io.micrometer.core.instrument.distribution.DistributionStatisticConfig
+import io.micrometer.core.instrument.distribution.pause.PauseDetector
 
 object FluencyMeterRegistry {
   val emptyTag = Seq.empty[Tag].asJava
@@ -170,4 +174,18 @@ class FluencyMeterRegistry(val fconfig:FluencyRegistryConfig, val nameMapper:Hie
 
   protected def toJavaDouble(v:Double) = new java.lang.Double(v)
 
+  override protected def newCounter(id: Meter.Id): Counter = super.newCounter(removeTags(id))
+
+  override protected def newGauge[T](id: Meter.Id, obj: T, valueFunction: ToDoubleFunction[T]): Gauge = super.newGauge(removeTags(id), obj, valueFunction)
+
+  override protected def newTimer(id: Meter.Id, distributionStatisticConfig: DistributionStatisticConfig, pauseDetector: PauseDetector): Timer = super.newTimer(removeTags(id), distributionStatisticConfig, pauseDetector)
+
+  override protected def newDistributionSummary(id: Meter.Id, distributionStatisticConfig: DistributionStatisticConfig, scale: Double): DistributionSummary = super.newDistributionSummary(removeTags(id), distributionStatisticConfig, scale)
+
+  protected def removeTags(id: Meter.Id): Meter.Id = {
+    if(fconfig.disableMetricsTag())
+      new Meter.Id(id.getName, Tags.empty, id.getBaseUnit, id.getDescription, id.getType)
+    else
+      id
+  }
 }
