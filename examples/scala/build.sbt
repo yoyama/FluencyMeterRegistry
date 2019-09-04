@@ -8,7 +8,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "fluency-meter-registry-example-scala",
     libraryDependencies ++= Seq(
-      "io.github.yoyama" % "fluency-meter-registory_2.12" % "0.1.0",
+      "io.github.yoyama" % "fluency-meter-registory_2.12" % "0.2.0",
     )
   )
   

@@ -1,6 +1,6 @@
 import java.time.Duration
 
-import io.github.yoyama.micrometer.{FluencyMeterRegistry, FluencyRegistryConfigTrait}
+import io.github.yoyama.micrometer.{FluencyMeterRegistry, FluencyRegistryConfig}
 import io.micrometer.core.instrument.Clock
 import io.micrometer.core.instrument.util.HierarchicalNameMapper
 import org.komamitsu.fluency.Fluency
@@ -9,7 +9,7 @@ import org.komamitsu.fluency.fluentd.FluencyBuilderForFluentd
 object Example {
     def main(args: Array[String]): Unit ={
         val fluency:Fluency = new FluencyBuilderForFluentd().build()
-        val fconfig = new FluencyRegistryConfigTrait {
+        val fconfig = new FluencyRegistryConfig {
             override def prefix(): String = "default"
             override def tag(): String = "example.scala"
             override def step(): Duration = Duration.ofSeconds(10)

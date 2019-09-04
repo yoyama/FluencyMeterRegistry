@@ -13,7 +13,7 @@ public class JavaExample1 {
     public static void main(String[] args) throws InterruptedException
     {
         Fluency fluency = new FluencyBuilderForFluentd().build();
-        FluencyRegistryConfig fconfig = new FluencyRegistryConfig("example.java", "test", Duration.ofSeconds(10));
+        FluencyRegistryConfig fconfig = FluencyRegistryConfig.apply("example.java", "test", Duration.ofSeconds(10));
         FluencyMeterRegistry meter = FluencyMeterRegistry.apply(fconfig, HierarchicalNameMapper.DEFAULT, Clock.SYSTEM, fluency);
         meter.counter("count1").increment();
         meter.summary("summary1").record(999.9);
