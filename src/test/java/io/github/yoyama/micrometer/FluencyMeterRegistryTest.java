@@ -93,7 +93,7 @@ public class FluencyMeterRegistryTest
 
     FluencyMeterRegistry createMeterRegistry()
     {
-        FluencyRegistryConfig fconfig = new FluencyRegistryConfig("file.java1", "prefix1", Duration.ofSeconds(10));
+        FluencyRegistryConfig fconfig = FluencyRegistryConfig.apply("file.java1", "prefix1", Duration.ofSeconds(10), false);
         FluencyMeterRegistry m =  FluencyMeterRegistry.apply(fconfig, HierarchicalNameMapper.DEFAULT, Clock.SYSTEM, mockedFluency);
         return m;
     }

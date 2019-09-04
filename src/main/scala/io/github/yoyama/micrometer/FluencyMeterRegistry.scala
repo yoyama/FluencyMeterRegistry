@@ -15,21 +15,21 @@ object FluencyMeterRegistry {
 
   def defaultThreadFactory = new NamedThreadFactory("fluency-metrics-publisher")
 
-  def createFluency(fconfig:FluencyRegistryConfigTrait):Fluency = {
+  def createFluency(fconfig:FluencyRegistryConfig):Fluency = {
     val builder = new FluencyBuilderForFluentd()
     builder.build()
   }
 
-  def apply(fconfig:FluencyRegistryConfigTrait, nameMapper:HierarchicalNameMapper, fclock:Clock):FluencyMeterRegistry = {
+  def apply(fconfig:FluencyRegistryConfig, nameMapper:HierarchicalNameMapper, fclock:Clock):FluencyMeterRegistry = {
     new FluencyMeterRegistry(fconfig, nameMapper, fclock, createFluency(fconfig), defaultThreadFactory)
   }
 
-  def apply(fconfig:FluencyRegistryConfigTrait, nameMapper:HierarchicalNameMapper, fclock:Clock, fluency:Fluency):FluencyMeterRegistry = {
+  def apply(fconfig:FluencyRegistryConfig, nameMapper:HierarchicalNameMapper, fclock:Clock, fluency:Fluency):FluencyMeterRegistry = {
     new FluencyMeterRegistry(fconfig, nameMapper, fclock, fluency, defaultThreadFactory)
   }
 }
 
-class FluencyMeterRegistry(val fconfig:FluencyRegistryConfigTrait, val nameMapper:HierarchicalNameMapper, val fclock:Clock,
+class FluencyMeterRegistry(val fconfig:FluencyRegistryConfig, val nameMapper:HierarchicalNameMapper, val fclock:Clock,
                            val fluency:Fluency, val threadFactory:ThreadFactory)
                                                       extends StepMeterRegistry(fconfig, fclock) {
 
@@ -155,6 +155,8 @@ class FluencyMeterRegistry(val fconfig:FluencyRegistryConfigTrait, val nameMappe
     val h = new java.util.HashMap[String, Object]()
     h.put("name", name)
     h.put("type", m.getId.getType.toString.toLowerCase)
+    if (!fconfig.disableMetricsTag())
+      m.getId.getTags.asScala.foreach(v => h.put("tag_" + v.getKey, v.getValue))
     (timestamp, h)
   }
 
