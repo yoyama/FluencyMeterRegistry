@@ -1,40 +1,35 @@
 package io.github.yoyama.micrometer
 
-import scala.collection.JavaConverters._
 import java.time.Duration
-import java.util
-import java.util.{ArrayList, List}
 import java.util.function.ToDoubleFunction
 
 import io.micrometer.core.instrument.composite.CompositeMeterRegistry
 import io.micrometer.core.instrument.logging.{LoggingMeterRegistry, LoggingRegistryConfig}
-import io.micrometer.core.instrument.{Clock, Counter, Tag, Timer}
+import io.micrometer.core.instrument.{Clock, Counter}
 import io.micrometer.core.instrument.util.HierarchicalNameMapper
 import org.komamitsu.fluency.{EventTime, Fluency}
-import org.scalatest.{FlatSpec, Matchers}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
-import org.scalatest.mockito.MockitoSugar
+import wvlet.airspec._
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-class FluencyMetrRegistrySpec extends FlatSpec with Matchers with MockitoSugar{
+class FluencyMeterRegistryAirSpec extends AirSpec {
 
-  "Counter" should "works well" in new Fixture {
+  def counterTest(): Unit = new Fixture {
     val m = createMeterRegistry(mockedFluency)
     for(i <- 1 to 10) {
       m.counter("count1").increment()
       Thread.sleep(1000)
     }
-    //emitList.foreach(x => x.toList.foreach(y => println(y)))
     assert(emitList.size > 0)
     m.close()
   }
 
-  "Timer" should "works well" in  new Fixture {
+  def timerTest(): Unit = new Fixture {
     val m = createMeterRegistry(mockedFluency)
     for(i <- 1 to 10) {
       m.timer("timer1", FluencyMeterRegistry.emptyTag).record(Duration.ofMillis(i*100))
@@ -43,8 +38,8 @@ class FluencyMetrRegistrySpec extends FlatSpec with Matchers with MockitoSugar{
     assert(emitList.size > 0)
     m.close()
   }
-
-  "Summary" should "works well" in  new Fixture {
+  
+  def summaryTest(): Unit = new Fixture {
     val m = createMeterRegistry(mockedFluency)
     for(i <- 1 to 10) {
       val v = i*11.1
@@ -55,7 +50,7 @@ class FluencyMetrRegistrySpec extends FlatSpec with Matchers with MockitoSugar{
     m.close()
   }
 
-  "Gauge" should "works well" in  new Fixture {
+  def gaugeTest(): Unit = new Fixture {
     val function: ToDoubleFunction[mutable.ListBuffer[Integer]] = new ToDoubleFunction[ListBuffer[Integer]] {
       override def applyAsDouble(value: ListBuffer[Integer]): Double = value.size
     }
@@ -70,7 +65,7 @@ class FluencyMetrRegistrySpec extends FlatSpec with Matchers with MockitoSugar{
     m.close()
   }
 
-  "CompositedMeterRegistry with FluencyMeterRegistry" should "works well" in  new FixtureComposition {
+  def compositedMeterRegistryTest() : Unit = new FixtureComposition {
     val m = createCompositedMeterRegistry()
     for(i <- 1 to 10) {
       val v = i*11.1
@@ -81,7 +76,7 @@ class FluencyMetrRegistrySpec extends FlatSpec with Matchers with MockitoSugar{
     m.close()
   }
 
-  "Metrics tag" should "be added" in new Fixture {
+  def metricsTagTest(): Unit = new Fixture {
     val m = createMeterRegistry(mockedFluency)
     val cnt = Counter.builder("count1").tags("col1", "val1", "col2", "val2").register(m)
     for(i <- 1 to 10) {
@@ -113,9 +108,9 @@ class FluencyMetrRegistrySpec extends FlatSpec with Matchers with MockitoSugar{
   }
 
   trait Fixture {
-    val mockedFluency = mock[Fluency]
     val emitList = mutable.ListBuffer[Array[AnyRef]]()
     val gaugeTarget = mutable.ListBuffer[Integer]()
+    val mockedFluency = mock[Fluency](classOf[Fluency])
 
     when(mockedFluency.emit(anyString, any[EventTime], any[java.util.Map[String, Object]]))
       .thenAnswer(new Answer[Unit]() {
