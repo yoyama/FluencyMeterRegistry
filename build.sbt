@@ -50,4 +50,6 @@ ThisBuild / publishTo := sonatypePublishTo.value
 ThisBuild / publishMavenStyle := true
 ThisBuild / pomIncludeRepository := { _ => false }
 ThisBuild / updateOptions := updateOptions.value.withGigahorse(false)
+ThisBuild / publishConfiguration := publishConfiguration.value.withOverwrite(true)
+ThisBuild / publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true)
 
