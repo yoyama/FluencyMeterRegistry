@@ -1,5 +1,5 @@
 # fluency-meter-registry
-![Actions](https://github.com/yoyama/FluencyMeterRegistry/workflows/CI/badge.svg)
+[![Actions](https://github.com/yoyama/FluencyMeterRegistry/workflows/CI/badge.svg)](https://github.com/yoyama/FluencyMeterRegistry/actions)
 [![CircleCI](https://circleci.com/gh/yoyama/FluencyMeterRegistry/tree/master.svg?style=svg)](https://circleci.com/gh/yoyama/FluencyMeterRegistry/tree/master)
 
 A [Micrometer](https://micrometer.io/) plugin for [Fluency](https://github.com/komamitsu/fluency).
