@@ -140,19 +140,12 @@ class FluencyMeterRegistryAirSpec extends AirSpec {
       })
 
     def createMeterRegistry(fluency:Fluency):FluencyMeterRegistry = {
-      val fconfig = new FluencyRegistryConfig {
-        override def tag(): String = "file.scala1"
-        override def step(): Duration = Duration.ofSeconds(5)
-      }
+      val fconfig = FluencyRegistryConfig("file.scala1", "default", Duration.ofSeconds(5))
       FluencyMeterRegistry(fconfig, HierarchicalNameMapper.DEFAULT, Clock.SYSTEM, fluency)
     }
 
     def createMeterRegistryWithDisableTag(fluency:Fluency):FluencyMeterRegistry = {
-      val fconfig = new FluencyRegistryConfig {
-        override def tag(): String = "file.scala1"
-        override def step(): Duration = Duration.ofSeconds(5)
-        override def disableMetricsTag(): Boolean = true
-      }
+      val fconfig = FluencyRegistryConfig("file.scala1", "default", Duration.ofSeconds(5), true)
       FluencyMeterRegistry(fconfig, HierarchicalNameMapper.DEFAULT, Clock.SYSTEM, fluency)
     }
   }

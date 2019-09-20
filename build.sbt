@@ -1,7 +1,7 @@
 import Dependencies._
 
-ThisBuild / scalaVersion     := "2.12.8"
-ThisBuild / version          := "0.2.0"
+ThisBuild / scalaVersion     := "2.12.10"
+ThisBuild / version          := "0.3.0-SNAPSHOT"
 ThisBuild / organization     := "io.github.yoyama"
 ThisBuild / organizationName := "yoyama"
 ThisBuild / description      := "Micrometer plugin for Fluency."
@@ -46,10 +46,10 @@ ThisBuild / developers := List(
    )
 )
 
-ThisBuild / publishTo := sonatypePublishTo.value
-ThisBuild / publishMavenStyle := true
-ThisBuild / pomIncludeRepository := { _ => false }
-ThisBuild / updateOptions := updateOptions.value.withGigahorse(false)
-ThisBuild / publishConfiguration := publishConfiguration.value.withOverwrite(true)
-ThisBuild / publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true)
+publishTo := sonatypePublishTo.value
+publishMavenStyle := true
+pomIncludeRepository := { _ => false }
+updateOptions := updateOptions.value.withGigahorse(false)
+publishConfiguration := publishConfiguration.value.withOverwrite(true)
+publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true)
 
