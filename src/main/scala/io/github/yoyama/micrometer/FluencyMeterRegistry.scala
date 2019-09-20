@@ -67,7 +67,7 @@ class FluencyMeterRegistry(val fconfig:FluencyRegistryConfig, val nameMapper:Hie
       case m: Meter => writeMeter(m)
       case _ => println("Unknown"); Option.empty
     }
-    w.map( d => emit(fluency, d.timestamp, d.hash, fconfig.tag()) )
+    w.map( d => emit(fluency, d.timestamp, d.hash, fconfig.tag) )
   }
 
   protected def writeCounter(counter: Counter): Option[EmitData] = {
@@ -159,7 +159,7 @@ class FluencyMeterRegistry(val fconfig:FluencyRegistryConfig, val nameMapper:Hie
     val h = new java.util.HashMap[String, Object]()
     h.put("name", name)
     h.put("type", m.getId.getType.toString.toLowerCase)
-    if (!fconfig.disableMetricsTag())
+    if (!fconfig.disableMetricsTag)
       m.getId.getTags.asScala.foreach(v => h.put("tag_" + v.getKey, v.getValue))
     (timestamp, h)
   }
@@ -183,7 +183,7 @@ class FluencyMeterRegistry(val fconfig:FluencyRegistryConfig, val nameMapper:Hie
   override protected def newDistributionSummary(id: Meter.Id, distributionStatisticConfig: DistributionStatisticConfig, scale: Double): DistributionSummary = super.newDistributionSummary(removeTags(id), distributionStatisticConfig, scale)
 
   protected def removeTags(id: Meter.Id): Meter.Id = {
-    if(fconfig.disableMetricsTag())
+    if(fconfig.disableMetricsTag)
       new Meter.Id(id.getName, Tags.empty, id.getBaseUnit, id.getDescription, id.getType)
     else
       id

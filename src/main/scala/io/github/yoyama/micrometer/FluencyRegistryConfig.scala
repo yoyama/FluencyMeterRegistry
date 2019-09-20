@@ -4,8 +4,9 @@ import java.time.Duration
 
 import io.micrometer.core.instrument.step.StepRegistryConfig
 
-trait FluencyRegistryConfig extends StepRegistryConfig {
-  override def prefix(): String = "default"
+class FluencyRegistryConfig(val prefixValue:String, val tag:String, val disableMetricsTag:Boolean)
+                                                                          extends StepRegistryConfig {
+  override def prefix(): String = prefixValue
 
   def get(key: String): String = {
     key match {
@@ -15,22 +16,12 @@ trait FluencyRegistryConfig extends StepRegistryConfig {
       case _ => null
     }
   }
-
-  def tag():String
-
-  def disableMetricsTag():Boolean = false
 }
 
 object FluencyRegistryConfig {
   def apply(tagValue: String, prefixValue: String, stepValue: Duration, disableMetricsTagValue: Boolean): FluencyRegistryConfig = {
-    new FluencyRegistryConfig {
-      override def tag(): String = tagValue
-
-      override def prefix(): String = prefixValue
-
+    new FluencyRegistryConfig(prefixValue, tagValue, disableMetricsTagValue) {
       override def step(): Duration = stepValue
-
-      override def disableMetricsTag(): Boolean = disableMetricsTagValue
     }
   }
 
