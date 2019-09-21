@@ -1,5 +1,9 @@
 import Dependencies._
 
+lazy val scala212 = "2.12.10"
+lazy val scala213 = "2.13.1"
+lazy val supportedScalaVersions = List(scala212, scala213)
+
 ThisBuild / scalaVersion     := "2.12.10"
 ThisBuild / version          := "0.3.0-SNAPSHOT"
 ThisBuild / organization     := "io.github.yoyama"
@@ -11,6 +15,7 @@ ThisBuild / homepage         := Some(url("https://github.com/yoyama/FluencyMeter
 lazy val root = (project in file("."))
   .settings(
     name := "fluency-meter-registory",
+    crossScalaVersions := supportedScalaVersions,
     libraryDependencies ++= Seq(
       "io.micrometer" % "micrometer-core" % "1.2.0",
       "org.komamitsu" % "fluency-core" % "2.3.3",
