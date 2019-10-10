@@ -165,7 +165,7 @@ class FluencyMeterRegistry(val fconfig:FluencyRegistryConfig, val nameMapper:Hie
   }
 
   protected def emit(f:Fluency, t:Long, v:java.util.Map[String,AnyRef], tag:String): Unit = {
-    f.emit(tag, EventTime.fromEpochMilli(t), v)
+    f.emit(tag, t / 1000, v)
   }
 
   protected def isFinite(v:Double):Boolean = java.lang.Double.isFinite(v)
