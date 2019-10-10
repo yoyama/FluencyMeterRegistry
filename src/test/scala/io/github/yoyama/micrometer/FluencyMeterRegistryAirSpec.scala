@@ -132,7 +132,7 @@ class FluencyMeterRegistryAirSpec extends AirSpec {
     val gaugeTarget = mutable.ListBuffer[Integer]()
     val mockedFluency = mock[Fluency](classOf[Fluency])
 
-    when(mockedFluency.emit(anyString, any[EventTime], any[java.util.Map[String, Object]]))
+    when(mockedFluency.emit(anyString, any[Long], any[java.util.Map[String, Object]]))
       .thenAnswer(new Answer[Unit]() {
         override def answer(invocation: InvocationOnMock): Unit = {
           emitList += invocation.getArguments

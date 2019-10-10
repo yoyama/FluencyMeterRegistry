@@ -8,10 +8,8 @@ import io.micrometer.core.instrument.logging.LoggingRegistryConfig;
 import io.micrometer.core.instrument.util.HierarchicalNameMapper;
 import org.junit.Before;
 import org.junit.Test;
-import org.komamitsu.fluency.EventTime;
 import org.komamitsu.fluency.Fluency;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -49,7 +47,7 @@ public class FluencyMeterRegistryTest
                 emitList.add(invocation.getArguments());
                 return null;
             }
-        }).when(mockedFluency).emit(any(String.class), any(EventTime.class), any(Map.class));
+        }).when(mockedFluency).emit(any(String.class), any(Long.class), any(Map.class));
         
     }
 
