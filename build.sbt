@@ -5,7 +5,7 @@ lazy val scala213 = "2.13.1"
 lazy val supportedScalaVersions = List(scala212, scala213)
 
 ThisBuild / scalaVersion     := "2.12.10"
-ThisBuild / version          := "0.3.0"
+ThisBuild / version          := "0.4.0"
 ThisBuild / organization     := "io.github.yoyama"
 ThisBuild / organizationName := "yoyama"
 ThisBuild / description      := "Micrometer plugin for Fluency."
