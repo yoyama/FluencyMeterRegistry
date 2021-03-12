@@ -43,6 +43,7 @@ lazy val root = (project in file("."))
       "org.slf4j" % "slf4j-api" % "1.7.28",
       "org.slf4j" % "slf4j-simple" % "1.7.28",
       "junit" % "junit" % "4.12" % Test,
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value % "test",
       "com.novocode" % "junit-interface" % "0.11" % "test",
       "org.wvlet.airframe" %% "airspec" % "19.8.10" % "test",
       "org.mockito" % "mockito-all" % "1.10.19" % Test,
