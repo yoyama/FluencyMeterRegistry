@@ -1,2 +1,2 @@
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.7")
-addSbtPlugin("io.get-coursier" % "sbt-coursier" % "2.0.0-RC2-1")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.1.1")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.5")
