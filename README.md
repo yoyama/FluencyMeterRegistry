@@ -1,7 +1,6 @@
 # fluency-meter-registry
-[ ![Download](https://api.bintray.com/packages/yoyama/maven/fluency-meter-registory/images/download.svg?version=0.4.0) ](https://bintray.com/yoyama/maven/fluency-meter-registory/0.4.0/link)
+
 [![Actions](https://github.com/yoyama/FluencyMeterRegistry/workflows/CI/badge.svg)](https://github.com/yoyama/FluencyMeterRegistry/actions)
-[![CircleCI](https://circleci.com/gh/yoyama/FluencyMeterRegistry/tree/master.svg?style=svg)](https://circleci.com/gh/yoyama/FluencyMeterRegistry/tree/master)
 
 A [Micrometer](https://micrometer.io/) plugin for [Fluency](https://github.com/komamitsu/fluency).
 Send metrics of Micrometer to [fluentd](https://www.fluentd.org/).
